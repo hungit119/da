@@ -17,7 +17,6 @@ abstract class Controller
     protected function validateBase(Request $request, $rules)
     {
         $validator = Validator::make($request->all(), $rules);
-
         if ($validator->fails()) {
             $errors = $validator->errors();
             $errors = json_decode($errors, true);
