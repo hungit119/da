@@ -16,4 +16,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     Route::post("/create-board", [BoardController::class, 'create']);
     Route::get("/get-list-board", [BoardController::class, 'list']);
+    Route::delete("/delete-board", [BoardController::class, 'delete']);
+    Route::put("/update-board", [BoardController::class, 'update']);
+    Route::get("/detail-board", [BoardController::class, 'get']);
 });

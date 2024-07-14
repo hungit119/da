@@ -97,4 +97,80 @@ class BoardController extends Controller
         $this->status = "success";
         return $this->responseData($listBoard);
     }
+
+    public function delete () {
+        $validatedData = $this->validateBase($this->request, [
+            'board_id' => 'required',
+        ]);
+        if ($validatedData) {
+            $this->code = 400;
+            return $this->responseData($validatedData);
+        }
+        $boardId = $this->request->input('board_id');
+        $result = $this->boardRepo->update($boardId,[
+            Board::_DELETED_AT => time()
+        ]);
+        if (isset($result)) {
+            $this->code = 200;
+            return $this->responseData($result);
+        }
+        $this->code = 400;
+        $this->message = 'delete fail';
+        return $this->responseData($result);
+    }
+
+    public function update () {
+        $validatedData = $this->validateBase($this->request, [
+            'board_id' => 'required',
+        ]);
+        if ($validatedData) {
+            $this->code = 400;
+            return $this->responseData($validatedData);
+        }
+
+        $boardId = $this->request->input('board_id');
+        $name   = $this->request->input('name');
+        $type   = $this->request->input('type');
+        $avatar = $this->request->input('avatar');
+
+        $dataUpdate = [];
+        if (isset($boardId)){
+            $dataUpdate[Board::_NAME] = $name;
+        }
+        if (isset($type)){
+            $dataUpdate[Board::_TYPE] = $type;
+        }
+        if (isset($avatar)){
+            $dataUpdate[Board::_AVATAR] = $avatar;
+        }
+        $result = $this->boardRepo->update($boardId, $dataUpdate);
+        if (isset($result)) {
+            $this->code = 200;
+            $this->status = "success";
+            $this-> message = "Update board success";
+            return $this->responseData($result);
+        }
+        $this->code = 400;
+        $this->message = 'update fail';
+        return $this->responseData($result);
+    }
+
+    public function get () {
+        $validatedData = $this->validateBase($this->request, [
+            'board_id' => 'required',
+        ]);
+        if ($validatedData) {
+            $this->code = 400;
+            return $this->responseData($validatedData);
+        }
+        $boardId = $this->request->input('board_id');
+        $result = $this->boardRepo->find($boardId);
+        if (isset($result)) {
+            $this->code = 200;
+            return $this->responseData($result);
+        }
+        $this->code = 400;
+        $this->message = 'get fail';
+        return $this->responseData($result);
+    }
 }
