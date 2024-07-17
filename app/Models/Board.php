@@ -27,4 +27,8 @@ class Board extends Model
         self::_CREATED_AT,
         self::_UPDATED_AT
     ];
+
+    public function parts (){
+        return $this->hasMany(Part::class,Part::_BOARD_ID,self::_ID)->whereNull(Part::_DELETED_AT);
+    }
 }
