@@ -14,6 +14,7 @@ class Part extends Model
     CONST _ID = 'id';
     CONST _NAME = 'name';
     CONST _BOARD_ID = 'board_id';
+    CONST _POSITION = 'position';
     CONST _DELETED_AT = 'deleted_at';
     CONST _CREATED_AT = 'created_at';
     CONST _UPDATED_AT = 'updated_at';
@@ -22,6 +23,7 @@ class Part extends Model
         self::_ID,
         self::_NAME,
         self::_BOARD_ID,
+        self::_POSITION,
         self::_DELETED_AT,
         self::_CREATED_AT,
         self::_UPDATED_AT,

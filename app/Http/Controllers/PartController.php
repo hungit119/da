@@ -66,6 +66,7 @@ class PartController extends Controller
         $select = [
             Part::_ID,
             Part::_NAME,
+            Part::_POSITION
         ];
         $parts = $this->partRepo->getListPartByBoardID($select,$boardId)->toArray();
 

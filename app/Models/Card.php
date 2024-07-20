@@ -18,6 +18,7 @@ class Card extends Model
     CONST _DUE_DATE = 'due_date';
     CONST _BACKGROUND = 'background';
     CONST _LABEL = "label";
+    CONST _POSITION = "position";
     CONST _DELETED_AT = 'deleted_at';
     CONST _CREATED_AT = 'created_at';
     CONST _UPDATED_AT = 'updated_at';
@@ -30,6 +31,7 @@ class Card extends Model
         self::_DUE_DATE,
         self::_BACKGROUND,
         self::_LABEL,
+        self::_POSITION,
         self::_DELETED_AT,
         self::_CREATED_AT,
         self::_UPDATED_AT,
