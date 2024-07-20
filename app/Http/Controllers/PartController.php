@@ -74,4 +74,36 @@ class PartController extends Controller
         $this->status = "success";
         return $this->responseData($parts);
     }
+
+    public function updatePosition () {
+        $validated = $this->validateBase($this->request, [
+            '*.id' => 'required',
+            '*.position' => 'required'
+        ]);
+
+        if ($validated) {
+            $this->code = 400;
+            return $this->responseData($validated);
+        }
+        $parts = $this->request->all();
+        DB::beginTransaction();
+        try {
+            foreach ($parts as $part) {
+                $this->partRepo->update($part[Part::_ID],[
+                    Part::_POSITION => $part[Part::_POSITION]
+                ]);
+            }
+            DB::commit();
+            goto next;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->code = 500;
+            $this->message = $e->getMessage();
+            return $this->responseData();
+        }
+        next:
+        $this->status = "success";
+        $this->message = "update part success";
+        return $this->responseData();
+    }
 }
