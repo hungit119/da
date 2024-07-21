@@ -3,6 +3,7 @@
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\PartController;
+use App\Http\Controllers\PartHasCardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\VerifyTokenApp;
@@ -31,4 +32,6 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     // card
     Route::get("/get-list-card",[CardController::class, 'list']);
     Route::post("/create-card",[CardController::class, 'create']);
+    Route::post("/update-part-card",[PartHasCardController::class,'updatePartCard']);
+    Route::post("/save-card",[CardController::class,'saveCard']);
 });

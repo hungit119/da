@@ -22,4 +22,9 @@ class CardRepository extends BaseRepository
             })
             ->get();
     }
+
+    public function findByID(mixed $cardId,$select = ["*"])
+    {
+        return $this->_model->select($select)->where(Card::_ID,$cardId)->whereNull(Card::_DELETED_AT)->first();
+    }
 }

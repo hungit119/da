@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Attachment;
 use App\Models\Card;
 use App\Models\Part;
 
@@ -18,6 +19,8 @@ class PartRepository extends BaseRepository
     {
         return $this->_model::with(["cards" => function ($query) {
             $query->orderBy(Card::_POSITION);
+        }, "cards.attachments" => function ($query) {
+            $query->orderBy(Attachment::_TYPE);
         }])->select($select)
             ->where(Part::_BOARD_ID, $boardId)
             ->whereNull(Part::_DELETED_AT)
