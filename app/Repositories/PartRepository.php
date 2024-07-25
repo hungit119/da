@@ -21,7 +21,7 @@ class PartRepository extends BaseRepository
             $query->orderBy(Card::_POSITION);
         }, "cards.attachments" => function ($query) {
             $query->orderBy(Attachment::_TYPE);
-        }])->select($select)
+        }, "cards.checklists.checkListItems"])->select($select)
             ->where(Part::_BOARD_ID, $boardId)
             ->whereNull(Part::_DELETED_AT)
             ->orderBy(Part::_POSITION)

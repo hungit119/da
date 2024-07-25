@@ -6,6 +6,8 @@ use App\Http\Controllers\PartController;
 use App\Http\Controllers\PartHasCardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheckListController;
+use App\Http\Controllers\CheckListItemController;
 use App\Http\Middleware\VerifyTokenApp;
 
 // for user
@@ -34,4 +36,10 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     Route::post("/create-card",[CardController::class, 'create']);
     Route::post("/update-part-card",[PartHasCardController::class,'updatePartCard']);
     Route::post("/save-card",[CardController::class,'saveCard']);
+
+    // checklist
+    Route::post("/create-checklist",[CheckListController::class,'create']);
+
+    // checklist item
+    Route::post("/create-checklist-item",[CheckListItemController::class,'create']);
 });
