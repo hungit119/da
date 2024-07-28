@@ -13,8 +13,10 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasApiTokens;
 
     const TABLE = 'users';
+    const _ID = 'id';
     const _NAME = 'name';
     const _EMAIL = 'email';
+    const _AVATAR = 'avatar';
     const _PASSWORD = 'password';
     const _DELETED_AT = 'deleted_at';
 
@@ -27,6 +29,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar',
         'password',
         self::_DELETED_AT
     ];

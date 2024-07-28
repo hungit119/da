@@ -13,6 +13,7 @@ use App\Http\Middleware\VerifyTokenApp;
 
 // for user
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/sign-in-with-google',[AuthController::class, 'signInWithGoogle']);
 
 // for admin
 Route::post('/register', [AuthController::class, 'register']);
