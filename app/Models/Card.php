@@ -41,4 +41,10 @@ class Card extends Model
     {
         return $this->belongsToMany(Part::class,PartHasCard::TABLE,PartHasCard::_CARD_ID,PartHasCard::_PART_ID)->whereNull(PartHasCard::TABLE. '.' . PartHasCard::_DELETED_AT);
     }
+    public function attachments () {
+        return $this->hasMany(Attachment::class, Attachment::_CARD_ID, self::_ID)->whereNull(Attachment::_DELETED_AT);
+    }
+    public function checklists () {
+        return $this->hasMany(Checklist::class, Checklist::_CARD_ID, self::_ID);
+    }
 }
