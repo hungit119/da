@@ -152,12 +152,12 @@ class AuthController extends Controller
         $givenName = $this->request->get('given_name');
 
         $user = $this->userRepo->findByEmailAndRole($email, Role::ROLE_LEADER);
-        $this->userRepo->update($user[User::_ID],[
-           User::_AVATAR => $avatar,
-           User::_NAME => $name ." ". $givenName,
-        ]);
-        $user[User::_AVATAR] = $avatar;
         if (isset($user)) {
+            $this->userRepo->update($user[User::_ID],[
+                User::_AVATAR => $avatar,
+                User::_NAME => $name ." ". $givenName,
+            ]);
+            $user[User::_AVATAR] = $avatar;
             goto next;
         }
 
