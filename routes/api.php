@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckListController;
 use App\Http\Controllers\CheckListItemController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\VerifyTokenApp;
 
 // for user
@@ -16,9 +17,12 @@ Route::post('/login', [AuthController::class, 'login']);
 // for admin
 Route::post('/register', [AuthController::class, 'register']);
 
-// route
+// user
+Route::get('/accept-invitation',[UserController::class,'sendNoti']);
 
+// authenticated
 Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
+
     // board
     Route::post("/create-board", [BoardController::class, 'create']);
     Route::get("/get-list-board", [BoardController::class, 'list']);
@@ -42,4 +46,5 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
 
     // checklist item
     Route::post("/create-checklist-item",[CheckListItemController::class,'create']);
+    Route::post("/update-checklist-item",[CheckListItemController::class,'update']);
 });

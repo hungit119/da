@@ -49,4 +49,25 @@ class CheckListItemController extends Controller
         return $this->responseData($checklistItem);
 
     }
+    public function update () {
+        $validated = $this->validateBase($this->request,[
+            'id' => 'required',
+            'status' => 'required'
+        ]);
+
+        if ($validated) {
+            $this->code = 400;
+            return $this->responseData($validated);
+        }
+        $id = $this->request->get('id');
+        $status = $this->request->get('status');
+
+        $this->checkListItemRepo->update($id, [
+            CheckListItem::_IS_CHECKED => $status
+        ]);
+
+        $this->status = "success";
+        $this->message = "update checklist item successfully";
+        return $this->responseData($id);
+    }
 }
