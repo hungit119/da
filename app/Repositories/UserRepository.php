@@ -20,4 +20,11 @@ class UserRepository extends BaseRepository
             $query->where(Role::_ID, $role);
         })->first();
     }
+
+    public function findByEmail(mixed $emailReceiver)
+    {
+        return $this->_model->where(User::_EMAIL, $emailReceiver)
+            ->whereNull(User::_DELETED_AT)
+            ->first();
+    }
 }

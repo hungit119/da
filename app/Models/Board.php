@@ -9,14 +9,14 @@ class Board extends Model
 {
     use HasFactory;
 
-    CONST TABLE = 'boards';
-    CONST _ID = 'id';
-    CONST _NAME = 'name';
-    CONST _AVATAR = 'avatar';
-    CONST _TYPE = 'type';
-    CONST _DELETED_AT = 'deleted_at';
-    CONST _CREATED_AT = 'created_at';
-    CONST _UPDATED_AT = 'updated_at';
+    const TABLE       = 'boards';
+    const _ID         = 'id';
+    const _NAME       = 'name';
+    const _AVATAR     = 'avatar';
+    const _TYPE       = 'type';
+    const _DELETED_AT = 'deleted_at';
+    const _CREATED_AT = 'created_at';
+    const _UPDATED_AT = 'updated_at';
 
     protected $fillable = [
         self::_ID,
@@ -28,7 +28,18 @@ class Board extends Model
         self::_UPDATED_AT
     ];
 
-    public function parts (){
-        return $this->hasMany(Part::class,Part::_BOARD_ID,self::_ID)->whereNull(Part::_DELETED_AT);
+    public function parts()
+    {
+        return $this->hasMany(Part::class, Part::_BOARD_ID, self::_ID)->whereNull(Part::_DELETED_AT);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, BoardHasUser::TABLE, BoardHasUser::_BOARD_ID,
+            BoardHasUser::_USER_ID)->whereNull(BoardHasUser::TABLE . '.' . BoardHasUser::_DELETED_AT)->withPivot([
+                BoardHasUser::_USER_ID,
+                BoardHasUser::_ROLE_ID,
+                BoardHasUser::_STATUS_ACCEPT
+        ]);
     }
 }

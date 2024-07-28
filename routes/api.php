@@ -31,6 +31,8 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     Route::put("/update-board", [BoardController::class, 'update']);
     Route::get("/detail-board", [BoardController::class, 'get']);
 
+    Route::post("/invite-user-to-board", [BoardController::class, 'inviteUserToBoard']);
+
     // part
     Route::post("/create-part", [PartController::class, 'create']);
     Route::get("/get-list-part", [PartController::class, 'list']);
