@@ -19,6 +19,8 @@ class BoardHasUser extends Model
     CONST _CREATED_AT = 'created_at';
     CONST _UPDATED_AT = 'updated_at';
 
+    CONST STATUS_ACCEPTED = 1;
+
     protected $fillable = [
         self::_BOARD_ID,
         self::_USER_ID,

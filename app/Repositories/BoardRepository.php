@@ -24,6 +24,7 @@ class BoardRepository extends BaseRepository
                 Board::TABLE . '.' . Board::_ID)
             ->whereNull(Board::TABLE . '.' . Board::_DELETED_AT)
             ->where(BoardHasUser::TABLE . '.' . BoardHasUser::_USER_ID, $userId)
+            ->where(BoardHasUser::TABLE . '.' . BoardHasUser::_STATUS_ACCEPT ,BoardHasUser::STATUS_ACCEPTED)
             ->get();
     }
 

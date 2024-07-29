@@ -153,9 +153,9 @@ class AuthController extends Controller
 
         $user = $this->userRepo->findByEmailAndRole($email, Role::ROLE_LEADER);
         if (isset($user)) {
-            $this->userRepo->update($user[User::_ID],[
+            $this->userRepo->update($user[User::_ID], [
                 User::_AVATAR => $avatar,
-                User::_NAME => $name ." ". $givenName,
+                User::_NAME   => $name . " " . $givenName,
             ]);
             $user[User::_AVATAR] = $avatar;
             goto next;
@@ -163,12 +163,51 @@ class AuthController extends Controller
 
         $newUser = [
             User::_EMAIL    => $email,
-            User::_NAME     => $name ." ". $givenName,
+            User::_NAME     => $name . " " . $givenName,
             User::_PASSWORD => bcrypt("12345678"),
             User::_AVATAR   => $avatar,
         ];
         $user    = $this->userRepo->create($newUser);
+        if (isset($user)) {
+            $this->userRoleRepo->create([
+                UserRole::_USER_ID => $user[User::_ID],
+                UserRole::_ROLE_ID => Role::ROLE_LEADER
+            ]);
+        }
+        next:
+        $data          = $this->setPermissions($user);
+        $this->message = 'login success';
+        $this->status  = 'success';
+        return $this->responseData($data);
+    }
 
+    public function preSignIn()
+    {
+        $validated = $this->validateBase($this->request, [
+            'email' => ['required', 'email'],
+        ]);
+        if ($validated) {
+            $this->code = 400;
+            return $this->responseData($validated);
+        }
+        $email = $this->request->get('email');
+
+        $user = $this->userRepo->findByEmailAndRole($email, Role::ROLE_LEADER);
+        if (isset($user)) {
+            goto next;
+        }
+        $newUser = [
+            User::_EMAIL    => $email,
+            User::_NAME     => "Guest",
+            User::_PASSWORD => bcrypt("12345678"),
+        ];
+        $user    = $this->userRepo->create($newUser);
+        if (isset($user)) {
+            $this->userRoleRepo->create([
+                UserRole::_USER_ID => $user[User::_ID],
+                UserRole::_ROLE_ID => Role::ROLE_LEADER
+            ]);
+        }
         next:
         $data          = $this->setPermissions($user);
         $this->message = 'login success';

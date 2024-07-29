@@ -20,4 +20,13 @@ class BoardHasUserRepository extends BaseRepository
             ->whereNull(BoardHasUser::_DELETED_AT)
             ->first();
     }
+
+    public function updateByUserIDAndBoardID(mixed $userID, mixed $boardID, array $dataUpdate)
+    {
+        return $this->_model
+            ->where(BoardHasUser::_USER_ID, $userID)
+            ->where(BoardHasUser::_BOARD_ID, $boardID)
+            ->whereNull(BoardHasUser::_DELETED_AT)
+            ->update($dataUpdate);
+    }
 }

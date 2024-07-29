@@ -27,4 +27,9 @@ class UserRepository extends BaseRepository
             ->whereNull(User::_DELETED_AT)
             ->first();
     }
+
+    public function findByID(mixed $userID)
+    {
+        return $this->_model->where(User::_ID, $userID)->whereNull(User::_DELETED_AT)->first();
+    }
 }

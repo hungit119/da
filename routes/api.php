@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\BoardHasUserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\PartController;
 use App\Http\Controllers\PartHasCardController;
@@ -14,6 +15,7 @@ use App\Http\Middleware\VerifyTokenApp;
 // for user
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/sign-in-with-google',[AuthController::class, 'signInWithGoogle']);
+Route::post('/pre-sign-in',[AuthController::class, 'preSignIn']);
 
 // for admin
 Route::post('/register', [AuthController::class, 'register']);
@@ -50,4 +52,8 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     // checklist item
     Route::post("/create-checklist-item",[CheckListItemController::class,'create']);
     Route::post("/update-checklist-item",[CheckListItemController::class,'update']);
+
+    // boardHasUser
+    Route::post("/update-board-has-user",[BoardHasUserController::class,'updateBoardHasUser']);
+    Route::post("/accept_invite_board",[BoardHasUserController::class,'acceptInviteBoard']);
 });
