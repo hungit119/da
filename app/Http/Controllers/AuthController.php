@@ -107,6 +107,7 @@ class AuthController extends Controller
             $this->code    = 400;
             return $this->responseData();
         }
+        $data          = $this->setPermissions($data);
         $this->message = 'register success';
         $this->status  = 'success';
         return $this->responseData($data);

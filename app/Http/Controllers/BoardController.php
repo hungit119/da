@@ -192,12 +192,12 @@ class BoardController extends Controller
     public function inviteUserToBoard()
     {
         $validatedData = $this->validateBase($this->request, [
-            'email_receiver'   => 'required | email',
-            'board_id'         => 'required',
-            'board_name'      => 'required | string',
-            'role_id'          => 'required',
-            'user_invite_name' => 'required | string',
-            'user_invite_email'=> 'required'
+            'email_receiver'    => 'required | email',
+            'board_id'          => 'required',
+            'board_name'        => 'required | string',
+            'role_id'           => 'required',
+            'user_invite_name'  => 'required | string',
+            'user_invite_email' => 'required'
         ]);
 
         if ($validatedData) {
@@ -205,11 +205,11 @@ class BoardController extends Controller
             return $this->responseData($validatedData);
         }
 
-        $emailReceiver  = $this->request->input('email_receiver');
-        $boardId        = $this->request->input('board_id');
-        $boardName     = $this->request->input('board_name');
-        $roleId         = $this->request->input('role_id');
-        $userInviteName = $this->request->input('user_invite_name');
+        $emailReceiver   = $this->request->input('email_receiver');
+        $boardId         = $this->request->input('board_id');
+        $boardName       = $this->request->input('board_name');
+        $roleId          = $this->request->input('role_id');
+        $userInviteName  = $this->request->input('user_invite_name');
         $userInviteEmail = $this->request->input('user_invite_email');
 
         $user = $this->userRepo->findByEmail($emailReceiver);
@@ -221,7 +221,7 @@ class BoardController extends Controller
                 return $this->responseData();
             } else {
                 // send email to user
-                Mail::to($user[User::_EMAIL]) ->send(new \App\Mail\UserInvitationJoinBoardEmail(
+                Mail::to($user[User::_EMAIL])->send(new \App\Mail\UserInvitationJoinBoardEmail(
                     $userInviteName,
                     $userInviteEmail,
                     $boardName,
@@ -241,17 +241,25 @@ class BoardController extends Controller
                 return $this->responseData($newBoardHasUser);
             }
         }
-
+        $requestQuest = $this->boardInviteUserRepo->findByEmailAndBoardID($userInviteEmail,$boardId);
+        if (isset($requestQuest)){
+            $this->code    = 400;
+            $this->message = "Đã gửi yêu cầu cho người dùng này";
+            return $this->responseData();
+        }
         $newBoardInViteUser = $this->boardInviteUserRepo->create([
             BoardInviteUser::_BOARD_ID      => $boardId,
             BoardInviteUser::_EMAIL_INVITED => $emailReceiver,
+            BoardInviteUser::_ROLE_ID       => $roleId
         ]);
-        Mail::to($user[User::_EMAIL]) ->send(new \App\Mail\UserInvitationJoinBoardEmail(
+        Mail::to($emailReceiver)->send(new \App\Mail\UserDontExistInvitationJoinBoardEmail(
             $userInviteName,
             $userInviteEmail,
             $boardName,
             $boardId,
-            $user[User::_EMAIL]
+            $newBoardInViteUser[BoardInviteUser::_ID],
+            $emailReceiver,
+            $roleId
         ));
 
         $this->code    = 200;

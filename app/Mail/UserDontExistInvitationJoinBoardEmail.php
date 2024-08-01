@@ -19,6 +19,7 @@ class UserDontExistInvitationJoinBoardEmail extends Mailable
     private $boardInviteID;
 
     private $emailReceiver;
+    private $roleID;
     /**
      * Create a new message instance.
      */
@@ -28,7 +29,8 @@ class UserDontExistInvitationJoinBoardEmail extends Mailable
         $boardName,
         $boardID,
         $boardInviteID,
-        $emailReceiver
+        $emailReceiver,
+        $roleID
     )
     {
         $this->senderName    = $senderName;
@@ -37,6 +39,7 @@ class UserDontExistInvitationJoinBoardEmail extends Mailable
         $this->boardID       = $boardID;
         $this->boardInviteID  = $boardInviteID;
         $this->emailReceiver = $emailReceiver;
+        $this->roleID           = $roleID;
     }
 
     /**
@@ -60,10 +63,12 @@ class UserDontExistInvitationJoinBoardEmail extends Mailable
             view: 'mail_guest',
             with: [
                 'senderName'    => $this->senderName,
+                'senderEmail'   => $this->senderEmail,
                 'boardName'     => $this->boardName,
                 'emailReceiver' => $this->emailReceiver,
                 'boardID'       => $this->boardID,
                 'boardInviteID'  => $this->boardInviteID,
+                'roleID'         => $this->roleID
             ]
         );
     }

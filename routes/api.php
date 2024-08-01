@@ -10,6 +10,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckListController;
 use App\Http\Controllers\CheckListItemController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BoardInviteUserController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Middleware\VerifyTokenApp;
 
 // for user
@@ -34,6 +36,7 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     Route::get("/detail-board", [BoardController::class, 'get']);
 
     Route::post("/invite-user-to-board", [BoardController::class, 'inviteUserToBoard']);
+    Route::post("/update-invite-guest", [BoardInviteUserController::class,"updateInviteQuest"]);
 
     // part
     Route::post("/create-part", [PartController::class, 'create']);
@@ -56,4 +59,11 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     // boardHasUser
     Route::post("/update-board-has-user",[BoardHasUserController::class,'updateBoardHasUser']);
     Route::post("/accept_invite_board",[BoardHasUserController::class,'acceptInviteBoard']);
+
+    // board invite user
+    Route::get("/get-list-board-invite-user",[BoardInviteUserController::class,'list']);
+
+    // comment
+    Route::post("/create-comment",[ActivityController::class,"createComment"]);
+    Route::get("/get-list-comment",[ActivityController::class,"getListComment"]);
 });

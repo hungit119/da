@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('board_id');
             $table->string('email_invited');
-            $table->integer('deleted_at');
+            $table->string('role_id');
+            $table->integer('deleted_at')->nullable();
             $table->timestamps();
         });
     }

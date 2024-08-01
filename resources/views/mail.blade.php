@@ -8,9 +8,9 @@
     <title>{{$senderName}} invite you to Treelo board</title>
 </head>
 <body>
-<p>Treelo</p>
-<p>{{$senderName}} mời vào bảng {{$boardName}} trong ứng dụng web Treelo</p>
-<a style="padding: 10px;background-color: #3E95FF;border-radius:12px;color: white;text-decoration: none;font-weight: 600"
+<p style="font-weight: bold;font-size: 30px">Treelo</p>
+<p style="font-weight: bold">{{$senderName}} mời bạn vào bảng {{$boardName}} trong ứng dụng web Treelo</p>
+<a style="display: inline-block;padding: 10px;background-color: #3E95FF;border-radius:12px;color: white;text-decoration: none;font-weight: 600"
    href="http://localhost:3000/pre-login/board/{{$boardID}}?email_receiver={{$emailReceiver}}">Go to board</a>
 </body>
 </html>
