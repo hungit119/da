@@ -34,15 +34,20 @@ class ActivityController extends Controller
         $content = $this->request->get('content');
         $userID = $this->request->get('user_id');
         $cardID = $this->request->get('card_id');
+        $parentID = $this->request->get('parent_id');
 
-        $comment = $this->activitiesRepo->create([
+        $dataComment = [
             Activity::_USER_ID => $userID,
             Activity::_CONTENT => $content,
             Activity::_CARD_ID => $cardID,
             Activity::_TIME => time()
-        ]);
+        ];
+        if (isset($parentID)){
+            $dataComment[Activity::_PARENT_ID] = $parentID;
+        }
+        $comment = $this->activitiesRepo->create($dataComment);
         $this->message = "Create comment successfully";
-        $this->code = 200;
+        $this->status = "success";
         return $this->responseData($comment);
     }
 
