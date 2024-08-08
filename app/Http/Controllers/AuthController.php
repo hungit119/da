@@ -61,11 +61,13 @@ class AuthController extends Controller
             'name'     => ['required'],
             'email'    => ['required', 'email'],
             'password' => ['required'],
+            'year_experience' => ['required'],
         ]);
 
         $name     = $this->request->input('name');
         $email    = $this->request->input('email');
         $password = $this->request->input('password');
+        $yearExperience = $this->request->input('year_experience');
 
         // check user exist
         $user = $this->userRepo->findByEmailAndRole($email, Role::ROLE_LEADER);
@@ -78,6 +80,7 @@ class AuthController extends Controller
         $newUser = [
             User::_NAME     => $name,
             User::_EMAIL    => $email,
+            User::_YEAR_EXPERIENCE => $yearExperience,
             User::_PASSWORD => bcrypt($password),
         ];
         DB::beginTransaction();

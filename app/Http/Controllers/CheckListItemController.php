@@ -22,7 +22,10 @@ class CheckListItemController extends Controller
     public function create () {
         $validated = $this->validateBase($this->request,[
             'name' => 'required',
-            'check_list_id' => 'required'
+            'check_list_id' => 'required',
+            'time_start' => 'required',
+            'job_score' => 'required',
+            'estimate_time_end' => 'required'
         ]);
 
         if ($validated) {
@@ -32,10 +35,16 @@ class CheckListItemController extends Controller
 
         $name = $this->request->get('name');
         $checkListID = $this->request->get('check_list_id');
+        $timeStart = $this->request->get('time_start');
+        $jobScore = $this->request->get('job_score');
+        $estimatedTimeEnd = $this->request->get('estimate_time_end');
 
         $checklistItem = $this->checkListItemRepo->create([
             CheckListItem::_NAME => $name,
             CheckListItem::_CHECK_LIST_ID => $checkListID,
+            CheckListItem::_TIME_START => $timeStart,
+            CheckListItem::_JOB_SCORE => $jobScore,
+            CheckListItem::_ESTIMATED_TIME_END => $estimatedTimeEnd
         ]);
 
         if (!$checklistItem) {
@@ -52,7 +61,7 @@ class CheckListItemController extends Controller
     public function update () {
         $validated = $this->validateBase($this->request,[
             'id' => 'required',
-            'status' => 'required'
+            'status' => 'required',
         ]);
 
         if ($validated) {
@@ -62,9 +71,16 @@ class CheckListItemController extends Controller
         $id = $this->request->get('id');
         $status = $this->request->get('status');
 
-        $this->checkListItemRepo->update($id, [
-            CheckListItem::_IS_CHECKED => $status
-        ]);
+        $dataUpdate = [
+            CheckListItem::_IS_CHECKED => $status,
+            CheckListItem::_TIME_END => time(),
+        ];
+
+        $checkListItem = $this->checkListItemRepo->find($id);
+        if ($checkListItem[CheckListItem::_ESTIMATED_TIME_END] > time()){
+            $dataUpdate[CheckListItem::_JOB_DONE_ON_TIME] = CheckListItem::JOB_DONE_ON_TIME;
+        }
+        $this->checkListItemRepo->update($id, $dataUpdate);
 
         $this->status = "success";
         $this->message = "update checklist item successfully";

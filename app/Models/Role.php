@@ -22,4 +22,5 @@ class Role extends Model
     ];
 
     const ROLE_LEADER = 'Leader';
+    const ROLE_ADMIN = 'Admin';
 }

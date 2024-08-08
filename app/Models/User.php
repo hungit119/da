@@ -17,6 +17,7 @@ class User extends Authenticatable
     const _NAME = 'name';
     const _EMAIL = 'email';
     const _AVATAR = 'avatar';
+    const _YEAR_EXPERIENCE = 'year_experience';
     const _PASSWORD = 'password';
     const _DELETED_AT = 'deleted_at';
 
@@ -30,6 +31,7 @@ class User extends Authenticatable
         'name',
         'email',
         'avatar',
+        'year_experience',
         'password',
         self::_DELETED_AT
     ];

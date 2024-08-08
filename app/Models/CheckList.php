@@ -12,6 +12,7 @@ class CheckList extends Model
     const _ID = 'id';
     const _NAME = 'name';
     const _CARD_ID = 'card_id';
+    const _USER_ID = 'user_id';
     const _DELETED_AT = 'deleted_at';
     const _CREATED_AT = 'created_at';
     const _UPDATED_AT = 'updated_at';
@@ -20,6 +21,7 @@ class CheckList extends Model
         self::_ID,
         self::_NAME,
         self::_CARD_ID,
+        self::_USER_ID,
         self::_DELETED_AT,
         self::_CREATED_AT,
         self::_UPDATED_AT

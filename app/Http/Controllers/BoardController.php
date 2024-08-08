@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Board;
 use App\Models\BoardHasUser;
 use App\Models\BoardInviteUser;
+use App\Models\Role;
 use App\Models\User;
 use App\Repositories\BoardHasUserRepository;
 use App\Repositories\BoardInviteUserRepository;
@@ -66,6 +67,7 @@ class BoardController extends Controller
                 $data        = [
                     BoardHasUser::_USER_ID  => $userId,
                     BoardHasUser::_BOARD_ID => $result[Board::_ID],
+                    BoardHasUser::_ROLE_ID => Role::ROLE_ADMIN
                 ];
                 $resultPilot = $this->boardHasUserRepo->create($data);
                 if (!isset($resultPilot)) {
