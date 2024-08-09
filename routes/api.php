@@ -66,4 +66,13 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     // comment
     Route::post("/create-comment",[ActivityController::class,"createComment"]);
     Route::get("/get-list-comment",[ActivityController::class,"getListComment"]);
+
+    // user
+    Route::get("/get-users",[UserController::class,"getListUser"]);
+    Route::post("/update-user",[UserController::class,"updateUser"]);
+    Route::post("/delete-user",[UserController::class,"deleteUser"]);
+    Route::post("/create-user",[UserController::class,"createUser"]);
+    Route::get("/get-user",[UserController::class,"getUser"]);
+
+    Route::post("/predict-time-end",[CheckListItemController::class,"predictTimeEnd"]);
 });

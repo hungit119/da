@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('check_list_items', function (Blueprint $table) {
-            $table->integer('time_start')->nullable();
-            $table->integer('time_end')->nullable();
+            $table->bigInteger('time_start')->nullable();
+            $table->bigInteger('time_end')->nullable();
             $table->integer('job_score')->nullable();
             $table->integer('job_done_on_time')->nullable();
-            $table->integer('estimate_time_end')->nullable();
+            $table->bigInteger('estimate_time_end')->nullable();
         });
     }
 
