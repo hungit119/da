@@ -25,7 +25,8 @@ class CheckListItemRepository extends BaseRepository
                 DB::raw('IFNULL(AVG(CASE WHEN cli.is_checked = 1 THEN (cli.time_end - cli.time_start) / 3600000 END), 0) as time_done_average'),
                 DB::raw('COUNT(CASE WHEN cli.job_done_on_time = 1 THEN cli.id END) as total_of_job_done_on_time'),
                 DB::raw('COUNT(cli.id) as total_of_job'),
-                DB::raw('IFNULL(SUM((cli.time_end - cli.time_start) / 3600000), 0) as completed_time_job')
+                DB::raw('IFNULL(SUM((cli.time_end - cli.time_start) / 3600000), 0) as completed_time_job'),
+                DB::raw('IFNULL(AVG(cli.job_score), 0) AS average_job_score'),
             )
             ->whereNull('cli.deleted_at')
             ->whereNull('cl.deleted_at')

@@ -7,6 +7,7 @@ use App\Repositories\CheckListItemRepository;
 use App\Services\AiService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Nette\Utils\DateTime;
 
 class CheckListItemController extends Controller
 {
@@ -109,20 +110,45 @@ class CheckListItemController extends Controller
         $jobScore = $this->request->get('jobScore');
 
         $data = $this->checkListItemRepo->getFeature($userID);
+        $totalScore = $data->average_job_score * $data->total_of_job;
+
+        $newTotalScore = $totalScore + $jobScore;
+
+        $newTotalOfJob = $data->total_of_job + 1;
+
+        $newAverageJobScore = $newTotalScore / $newTotalOfJob;
         $feature = [
             'number_of_job_done' => $data->number_of_job_done,
             'time_done_average' => json_decode($data->time_done_average),
             'total_of_job_done_on_time' => $data->total_of_job_done_on_time,
             'total_of_job' => $data->total_of_job,
-            'job_score' => $jobScore,
+            'average_job_score' => $newAverageJobScore,
             'year_experience' => $data->year_experience,
         ];
-        $response = $this->aiService->predict($feature);
+        $response = $this->aiService->callFlaskApiFlask($feature);
+        $endDate = 0;
         if (isset($response)){
-            $completedTime = $response->data;
+            $completedTime = $response['completed_time'];
+            // Convert milliseconds to seconds
+            $timeStartSeconds = $timeStart / 1000;
+
+            $startDateTime = (new DateTime())->setTimestamp($timeStartSeconds);
+
+            $endDateTime = clone $startDateTime; // Clone to preserve original start time
+            $endDateTime->modify("+$completedTime hours");
+
+            $endDate = $endDateTime->format('Y-m-d H:i:s');
+
+            echo "Start Date and Time: " . $startDateTime->format('Y-m-d H:i:s') . "\n";
+            echo "End Date and Time: " . $endDate;
+            goto next;
+
         }
+    next:
         $this->code = 200;
         $this->message = "predict time end successfully";
-        return $this->responseData($response);
+        return $this->responseData([
+            'end_date' => $endDate
+        ]);
     }
 }
