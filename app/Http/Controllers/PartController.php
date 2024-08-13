@@ -106,4 +106,33 @@ class PartController extends Controller
         $this->message = "update part success";
         return $this->responseData();
     }
+
+    public function updatePart() {
+    $validated = $this->validateBase($this->request, [
+            'id' => 'required',
+            'name' => 'required',
+        ]);
+        if ($validated) {
+            $this->code = 400;
+            return $this->responseData($validated);
+        }
+
+        $id = $this->request->input('id');
+        $name = $this->request->input('name');
+        $isDeleted = $this->request->input('is_deleted');
+
+        $dataUpdate = [];
+
+        if (isset($name)){
+            $dataUpdate[Part::_NAME] = $name;
+        }
+        if (isset($isDeleted)){
+            $dataUpdate[Part::_DELETED_AT] = time();
+        }
+
+        $this->partRepo->update($id,$dataUpdate);
+        $this->status = "success";
+        $this->message = "update part success";
+        return $this->responseData();
+    }
 }

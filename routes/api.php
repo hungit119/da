@@ -42,6 +42,7 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     Route::post("/create-part", [PartController::class, 'create']);
     Route::get("/get-list-part", [PartController::class, 'list']);
     Route::post("/update-position-parts",[PartController::class,'updatePosition']);
+    Route::post("/update-part",[PartController::class,'updatePart']);
 
     // card
     Route::get("/get-list-card",[CardController::class, 'list']);

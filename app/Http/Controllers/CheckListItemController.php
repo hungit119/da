@@ -96,18 +96,18 @@ class CheckListItemController extends Controller
     public function predictTimeEnd()
     {
         $validated = $this->validateBase($this->request,[
-            'userID' => 'required',
-            'timeStart' => 'required',
-            'jobScore' => 'required',
+            'user_id' => 'required',
+            'time_start' => 'required',
+            'job_score' => 'required',
         ]);
         if ($validated){
             $this->code = 400;
             return $this->responseData($validated);
         }
 
-        $userID = $this->request->get('userID');
-        $timeStart = $this->request->get('timeStart');
-        $jobScore = $this->request->get('jobScore');
+        $userID = $this->request->get('user_id');
+        $timeStart = $this->request->get('time_start');
+        $jobScore = $this->request->get('job_score');
 
         $data = $this->checkListItemRepo->getFeature($userID);
         $totalScore = $data->average_job_score * $data->total_of_job;
@@ -127,28 +127,31 @@ class CheckListItemController extends Controller
         ];
         $response = $this->aiService->callFlaskApiFlask($feature);
         $endDate = 0;
+        $timeEnd = 0;
         if (isset($response)){
             $completedTime = $response['completed_time'];
             // Convert milliseconds to seconds
-            $timeStartSeconds = $timeStart / 1000;
-
-            $startDateTime = (new DateTime())->setTimestamp($timeStartSeconds);
-
-            $endDateTime = clone $startDateTime; // Clone to preserve original start time
-            $endDateTime->modify("+$completedTime hours");
-
-            $endDate = $endDateTime->format('Y-m-d H:i:s');
-
-            echo "Start Date and Time: " . $startDateTime->format('Y-m-d H:i:s') . "\n";
-            echo "End Date and Time: " . $endDate;
+            $timeEnd = $this->calculateTimeEnd($timeStart,$completedTime);
+            $endDate = Carbon::createFromTimestampMs($timeEnd)->timezone("Asia/Ho_Chi_Minh")->format("Y-m-d H:i:s");
             goto next;
 
         }
     next:
-        $this->code = 200;
         $this->message = "predict time end successfully";
+        $this->status = "success";
         return $this->responseData([
-            'end_date' => $endDate
+            'end_date' => $endDate,
+            'time_end' => $timeEnd,
         ]);
+    }
+    private function calculateTimeEnd($timeStart, $hours) {
+        // Tạo đối tượng Carbon từ timestamp (mili-giây)
+        $startTime = Carbon::createFromTimestampMs($timeStart);
+
+        // Cộng số giờ vào start time
+        $endTime = $startTime->addHours($hours);
+
+        // Trả về time_end dưới dạng timestamp mili-giây
+        return $endTime->getTimestampMs();
     }
 }

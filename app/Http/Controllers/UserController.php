@@ -161,7 +161,7 @@ class UserController extends Controller
     {
         $id = $this->request->get('id');
         $user = $this->userRepo->getUser($id);
-        $this->message = "delete user success";
+        $this->message = "get user success";
         $this->status="success";
         return $this->responseData($user);
     }
