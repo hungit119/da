@@ -45,6 +45,6 @@ class Card extends Model
         return $this->hasMany(Attachment::class, Attachment::_CARD_ID, self::_ID)->whereNull(Attachment::_DELETED_AT);
     }
     public function checklists () {
-        return $this->hasMany(Checklist::class, Checklist::_CARD_ID, self::_ID);
+        return $this->hasMany(Checklist::class, Checklist::_CARD_ID, self::_ID)->whereNull(Checklist::_DELETED_AT);
     }
 }

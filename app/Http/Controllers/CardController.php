@@ -185,4 +185,32 @@ class CardController extends Controller
         }
         return $dataInsert;
     }
+
+    public function updateCard()
+    {
+        $validated = $this->validateBase($this->request, [
+            'id' => 'required',
+            'name' => 'required',
+        ]);
+        if ($validated) {
+            $this->code = 400;
+            return $this->responseData($validated);
+        }
+        $id = $this->request->input('id');
+        $name = $this->request->input('name');
+        $isDeleted = $this->request->input('is_deleted');
+
+        $dataUpdate = [];
+
+        if (isset($name)){
+            $dataUpdate[Card::_NAME] = $name;
+        }
+        if (isset($isDeleted)){
+            $dataUpdate[Card::_DELETED_AT] = time();
+        }
+        $this->cardRepo->update($id, $dataUpdate);
+        $this->status  = "success";
+        $this->message = "update card success";
+        return $this->responseData();
+    }
 }

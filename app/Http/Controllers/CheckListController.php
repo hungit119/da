@@ -49,4 +49,31 @@ class CheckListController extends Controller
         $this->message = "create checklist success";
         return $this->responseData($checkList);
     }
+    public function update () {
+        $validated = $this->validateBase($this->request,[
+            'id' => 'required',
+            'name' => 'required',
+        ]);
+        if ($validated) {
+            $this->code = 400;
+            return $this->responseData($validated);
+        }
+        $id = $this->request->get('id');
+        $name = $this->request->get('name');
+        $isDeleted = $this->request->get('is_deleted');
+
+        $dataUpdate = [];
+
+        if (isset($name)){
+            $dataUpdate[CheckList::_NAME] = $name;
+        }
+        if (isset($isDeleted)){
+            $dataUpdate[CheckList::_DELETED_AT] = time();
+        }
+        $checkList = $this->checkListRepo->update($id,$dataUpdate);
+
+        $this->status = "success";
+        $this->message = "update checklist success";
+        return $this->responseData($checkList);
+    }
 }

@@ -49,9 +49,11 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
     Route::post("/create-card",[CardController::class, 'create']);
     Route::post("/update-part-card",[PartHasCardController::class,'updatePartCard']);
     Route::post("/save-card",[CardController::class,'saveCard']);
+    Route::post("/update-card",[CardController::class,'updateCard']);
 
     // checklist
     Route::post("/create-checklist",[CheckListController::class,'create']);
+    Route::post("/update-checklist",[CheckListController::class,'update']);
 
     // checklist item
     Route::post("/create-checklist-item",[CheckListItemController::class,'create']);

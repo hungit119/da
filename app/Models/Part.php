@@ -31,6 +31,6 @@ class Part extends Model
 
     public function cards()
     {
-        return $this->belongsToMany(Card::class,PartHasCard::TABLE,PartHasCard::_PART_ID,PartHasCard::_CARD_ID)->whereNull(PartHasCard::TABLE. '.' . PartHasCard::_DELETED_AT);
+        return $this->belongsToMany(Card::class,PartHasCard::TABLE,PartHasCard::_PART_ID,PartHasCard::_CARD_ID)->whereNull(PartHasCard::TABLE. '.' . PartHasCard::_DELETED_AT)->whereNull(  Card::TABLE .'.' . Card::_DELETED_AT);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CheckListItem;
 use App\Repositories\CheckListItemRepository;
+use App\Repositories\UserRepository;
 use App\Services\AiService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,15 +14,18 @@ class CheckListItemController extends Controller
 {
     private Request $request;
     private CheckListItemRepository $checkListItemRepo;
+    private UserRepository $userRepo;
     private AiService  $aiService;
     public function __construct(
         Request $request,
         CheckListItemRepository $checkListItemRepo,
+        UserRepository $userRepo,
         AiService $aiService
     )
     {
         $this->request = $request;
         $this->checkListItemRepo = $checkListItemRepo;
+        $this->userRepo = $userRepo;
         $this->aiService = $aiService;
     }
 
@@ -76,6 +80,15 @@ class CheckListItemController extends Controller
         }
         $id = $this->request->get('id');
         $status = $this->request->get('status');
+        $is_deleted = $this->request->get('is_deleted');
+        if (isset($is_deleted)){
+            $this->checkListItemRepo->update($id,[
+                CheckListItem::_DELETED_AT => time(),
+            ]);
+            $this->message = "delete checklist item successfully";
+            $this->status = "success";
+            return $this->responseData();
+        }
 
         $now  = Carbon::now()->timezone('asia/ho_chi_minh')->timestamp;
         $dataUpdate = [
@@ -110,20 +123,41 @@ class CheckListItemController extends Controller
         $jobScore = $this->request->get('job_score');
 
         $data = $this->checkListItemRepo->getFeature($userID);
+        if (isset($data)){
+            $numberOfJobDone = $data->number_of_job_done;
+            $totalOfJobDoneOnTime = $data->total_of_job_done_on_time;
+            $totalOfJob = $data->total_of_job;
+            $timeDoneAverage = json_decode($data->time_done_average);
+            $yearExperience = $data->year_experience;
+        }
+        else {
+            $numberOfJobDone = 0;
+            $totalOfJobDoneOnTime = 0;
+            $totalOfJob = 0;
+            $timeDoneAverage = 0;
+            $yearExperience = $this->userRepo->find($userID)->year_experience;
+
+            $totalScore = 0;
+            $newTotalOfJob = 1;
+            $newTotalScore = $totalScore + $jobScore;
+            goto next_step;
+        }
         $totalScore = $data->average_job_score * $data->total_of_job;
 
         $newTotalScore = $totalScore + $jobScore;
 
         $newTotalOfJob = $data->total_of_job + 1;
 
+        next_step:
+
         $newAverageJobScore = $newTotalScore / $newTotalOfJob;
         $feature = [
-            'number_of_job_done' => $data->number_of_job_done,
-            'time_done_average' => json_decode($data->time_done_average),
-            'total_of_job_done_on_time' => $data->total_of_job_done_on_time,
-            'total_of_job' => $data->total_of_job,
+            'number_of_job_done' => $numberOfJobDone,
+            'time_done_average' => $timeDoneAverage,
+            'total_of_job_done_on_time' => $totalOfJobDoneOnTime,
+            'total_of_job' => $totalOfJob,
             'average_job_score' => $newAverageJobScore,
-            'year_experience' => $data->year_experience,
+            'year_experience' => $yearExperience
         ];
         $response = $this->aiService->callFlaskApiFlask($feature);
         $endDate = 0;
