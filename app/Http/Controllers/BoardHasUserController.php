@@ -50,6 +50,37 @@ class BoardHasUserController extends Controller
         return $this->responseData();
     }
 
+    public function editBoardHasUser () {
+        $validated = $this->validateBase($this->request,[
+            'user_id' => 'required',
+            'board_id' => 'required'
+        ]);
+
+        if ($validated) {
+            $this->code = 400;
+            return $this->responseData($validated);
+        }
+
+        $userID = $this->request->get('user_id');
+        $boardID = $this->request->get('board_id');
+        $roleID= $this->request->get('role_id');
+        $isDeleted = $this->request->get('is_deleted');
+
+        $dataUpdate = [];
+        if ($roleID) {
+            $dataUpdate[BoardHasUser::_ROLE_ID] = $roleID;
+        }
+
+        if ($isDeleted) {
+            $dataUpdate[BoardHasUser::_DELETED_AT] = time();
+        }
+
+        $this->boardHasUserRepo->updateByUserIDAndBoardID($userID,$boardID,$dataUpdate);
+        $this->status = "success";
+        $this->message = "Update status accept success";
+        return $this->responseData();
+    }
+
     public function acceptInviteBoard () {
         $validated = $this->validateBase($this->request,[
             'user_id' => 'required|integer',

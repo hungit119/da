@@ -37,6 +37,7 @@ Route::prefix('v1')->middleware([VerifyTokenApp::class])->group(function () {
 
     Route::post("/invite-user-to-board", [BoardController::class, 'inviteUserToBoard']);
     Route::post("/update-invite-guest", [BoardInviteUserController::class,"updateInviteQuest"]);
+    Route::post("/edit-board-user",[BoardHasUserController::class,'editBoardHasUser']);
 
     // part
     Route::post("/create-part", [PartController::class, 'create']);

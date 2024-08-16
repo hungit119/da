@@ -28,6 +28,9 @@ class Board extends Model
         self::_UPDATED_AT
     ];
 
+    const ROLE_MANAGER = "Manager";
+    const ROLE_GUEST = "Guest";
+
     public function parts()
     {
         return $this->hasMany(Part::class, Part::_BOARD_ID, self::_ID)->whereNull(Part::_DELETED_AT);
@@ -36,10 +39,11 @@ class Board extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, BoardHasUser::TABLE, BoardHasUser::_BOARD_ID,
-            BoardHasUser::_USER_ID)->whereNull(BoardHasUser::TABLE . '.' . BoardHasUser::_DELETED_AT)->withPivot([
+            BoardHasUser::_USER_ID)->withPivot([
                 BoardHasUser::_USER_ID,
                 BoardHasUser::_ROLE_ID,
-                BoardHasUser::_STATUS_ACCEPT
+                BoardHasUser::_STATUS_ACCEPT,
+                BoardHasUser::_DELETED_AT
         ]);
     }
 }

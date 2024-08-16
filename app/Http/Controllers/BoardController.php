@@ -67,7 +67,7 @@ class BoardController extends Controller
                 $data        = [
                     BoardHasUser::_USER_ID  => $userId,
                     BoardHasUser::_BOARD_ID => $result[Board::_ID],
-                    BoardHasUser::_ROLE_ID => Role::ROLE_ADMIN
+                    BoardHasUser::_ROLE_ID => Board::ROLE_MANAGER
                 ];
                 $resultPilot = $this->boardHasUserRepo->create($data);
                 if (!isset($resultPilot)) {
